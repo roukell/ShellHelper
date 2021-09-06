@@ -38,15 +38,15 @@ done
 # echo "${args1[@]}"
 
 # Calculate the difference between the two arrays and store them in an array
-for i in "${!args[@]}"; do
-  CALL_DURATION=$((args1[i] - args[i]))
+for k in "${!args[@]}"; do
+  CALL_DURATION=$((args1[k] - args[k]))
   array+=("$CALL_DURATION")
 done
 # echo "${array[@]}"
 
 # Calculate the average call duration
-for k in "${array[@]}"; do
-  ((sum += k))
+for m in "${array[@]}"; do
+  ((sum += m))
   ((total++))
 done
 echo "Average call time: $((sum / total)) seconds"
