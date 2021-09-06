@@ -13,9 +13,9 @@ if [[ $# -lt 1 ]]; then
 fi
 
 # Get eventEstablishedTime and eventReleasedTime from the log file
-EVENT_ESTABLISHED_TIME=$(sudo grep -B 1 '"type": "eventEstablished"' "$1" | grep 'CH2O' | awk '{print $2 " " $3}' | cut -d '.' -f 1 | sort | uniq | sed 's/./&-/4' | sed 's/./&-/7')
+EVENT_ESTABLISHED_TIME=$(grep -B 1 '"type": "eventEstablished"' "$1" | grep 'CH2O' | awk '{print $2 " " $3}' | cut -d '.' -f 1 | sort | uniq | sed 's/./&-/4' | sed 's/./&-/7')
 
-EVENT_RELEASED_TIME=$(sudo grep -B 1 '"type": "eventReleased"' "$1" | grep 'CH2O' | awk '{print $2 " " $3}' | cut -d '.' -f 1 | sort | uniq | sed 's/./&-/4' | sed 's/./&-/7')
+EVENT_RELEASED_TIME=$(grep -B 1 '"type": "eventReleased"' "$1" | grep 'CH2O' | awk '{print $2 " " $3}' | cut -d '.' -f 1 | sort | uniq | sed 's/./&-/4' | sed 's/./&-/7')
 
 # Explicitly set IFS to contain only a line feed
 IFS='
