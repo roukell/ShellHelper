@@ -1,5 +1,5 @@
 #!/bin/bash
-# This script calculate the average time difference (in seconds) between the eventEstablishedTime and eventReleasedTime
+# This script calculates the average time difference (in seconds) between the eventEstablishedTime and eventReleasedTime
 
 # Display usage and exit if no input file is provided
 usage() {
