@@ -1,28 +1,52 @@
 #!/bin/bash
 # This script calculate the time difference (in seconds) between the eventEstablishedTime and eventReleasedTime
 
-# display usage and exit if no input file is provided
+# Display usage and exit if no input file is provided
 usage() {
   echo "Usage: $0 [LOG_FILE]" >&2
   exit 1
 }
 
-# if the user does not supply at least one argument, give them help
+# If the user does not supply at least one argument, give them help
 if [[ $# -lt 1 ]]; then
   usage
 fi
 
-# get eventEstablishedTime and eventReleasedTime from the log file
+# Get eventEstablishedTime and eventReleasedTime from the log file
 EVENT_ESTABLISHED_TIME=$(sudo grep -B 1 '"type": "eventEstablished"' "$1" | grep 'CH2O' | awk '{print $2 " " $3}' | cut -d '.' -f 1 | sort | uniq | sed 's/./&-/4' | sed 's/./&-/7')
 
 EVENT_RELEASED_TIME=$(sudo grep -B 1 '"type": "eventReleased"' "$1" | grep 'CH2O' | awk '{print $2 " " $3}' | cut -d '.' -f 1 | sort | uniq | sed 's/./&-/4' | sed 's/./&-/7')
 
-echo "Event Established at: $EVENT_ESTABLISHED_TIME"
-echo "Event Released at: $EVENT_RELEASED_TIME"
+# Explicitly set IFS to contain only a line feed
+IFS='
+'
 
-# convert the eventEstablishedTime and eventReleasedTime to seconds, Epoch time
-EVENT_ESTABLISHED_TIME_EPOCH=$(date -j -f '%Y-%m-%d %T' "$EVENT_ESTABLISHED_TIME" "+%s")
-EVENT_RELEASED_TIME_EPOCH=$(date -j -f '%Y-%m-%d %T' "$EVENT_RELEASED_TIME" "+%s")
+# Convert the eventEstablishedTime to Epoch time, and store them in an array
+for i in $EVENT_ESTABLISHED_TIME; do
+  EVENT_ESTABLISHED_TIME_EPOCH=$(date -j -f '%Y-%m-%d %T' "$i" "+%s")
+  args+=("$EVENT_ESTABLISHED_TIME_EPOCH")
+done
+# echo 'eventEstablishedTime array:'
+# echo "${args[@]}"
 
-# calculate the difference between the eventEstablishedTime and eventReleasedTime
-echo "Call time: $(($EVENT_RELEASED_TIME_EPOCH - $EVENT_ESTABLISHED_TIME_EPOCH)) seconds"
+# Convert eventReleasedTime to Epoch time, and store them in an array
+for j in $EVENT_RELEASED_TIME; do
+  EVENT_RELEASED_TIME_EPOCH=$(date -j -f '%Y-%m-%d %T' "$j" "+%s")
+  args1+=("$EVENT_RELEASED_TIME_EPOCH")
+done
+# echo 'eventReleasedTime array1:'
+# echo "${args1[@]}"
+
+# Calculate the difference between the two arrays and store them in an array
+for i in "${!args[@]}"; do
+  CALL_DURATION=$((args1[i] - args[i]))
+  array+=("$CALL_DURATION")
+done
+# echo "${array[@]}"
+
+# Calculate the average call duration
+for k in "${array[@]}"; do
+  ((sum += k))
+  ((total++))
+done
+echo "Average call time: $((sum / total)) seconds"
