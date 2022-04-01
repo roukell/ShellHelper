@@ -1,0 +1,21 @@
+#!/bin/bash
+# this script creates a pid file for running coral processes
+# this script can only be run by coral user
+
+# create pid directory
+PIDDIR=~/pids
+mkdir -p $PIDDIR
+
+# check coral user ID 
+CORALUID=$(id -u coral)
+
+# list out the coral processes that are active and running
+PROCESSES="$(systemctl -t service | grep coral-  | grep running | grep -v autopilot | grep -v httpd |  awk '{ print $1 }' | sed 's/coral-//' | sed  's/.service//')"
+
+# PROCESSES is a string of running processes in multiple lines, each of which should be an element. Hence using mapfile
+mapfile -t PROCESSES_ARRAY <<< "$PROCESSES"
+
+# loop through the processes and create a pid file for each of them
+for p in "${PROCESSES_ARRAY[@]}"; do
+  pgrep -f "$p" -U "$CORALUID" > $PIDDIR/"$p".pid
+done
