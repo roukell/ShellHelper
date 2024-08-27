@@ -1,2 +1,7 @@
+<<<<<<< HEAD
 add some test file example
 this file is for main branch 
+=======
+add some test file example
+add something from test branch to create conflict
+>>>>>>> fb3d3ba (updated test1.txt)
