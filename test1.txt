@@ -1,3 +1,2 @@
 add some test file example
-this file is for main branch
-make more conflicts for rebase example
+I want to create more conflicts
