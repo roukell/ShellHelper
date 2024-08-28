@@ -1,9 +1,0 @@
-add some test file example
-I want to create more conflicts
-add some new change here
-<<<<<<< HEAD
-more changes from 'new' branch.
-add another change from new branch.
-=======
-more changes from 'new' branch.
->>>>>>> 952c15f (added more changes from new branch)
