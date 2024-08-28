@@ -1,3 +1,4 @@
 add some test file example
 I want to create more conflicts
 add some new change here
+more changes from 'new' branch.
